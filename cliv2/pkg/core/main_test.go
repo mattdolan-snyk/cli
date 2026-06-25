@@ -226,6 +226,8 @@ func Test_runMainWorkflow_unknownargs(t *testing.T) {
 			// Register our data filter workflow
 			err = localworkflows.InitFilterFindingsWorkflow(globalEngine)
 			assert.NoError(t, err)
+			err = localworkflows.InitDeltaFilterFindingsWorkflow(globalEngine)
+			assert.NoError(t, err)
 
 			config := configuration.NewWithOpts(configuration.WithAutomaticEnv())
 			cmd := &cobra.Command{
@@ -426,6 +428,8 @@ func Test_runWorkflowAndProcessData(t *testing.T) {
 	// Register our data filter workflow
 	err = localworkflows.InitFilterFindingsWorkflow(globalEngine)
 	assert.NoError(t, err)
+	err = localworkflows.InitDeltaFilterFindingsWorkflow(globalEngine)
+	assert.NoError(t, err)
 
 	fn := func(invocation workflow.InvocationContext, input []workflow.Data) ([]workflow.Data, error) {
 		typeId := workflow.NewTypeIdentifier(invocation.GetWorkflowIdentifier(), "workflowData")
@@ -515,6 +519,8 @@ func Test_runWorkflowAndProcessData_with_Filtering(t *testing.T) {
 
 	// Register our data filter workflow
 	err = localworkflows.InitFilterFindingsWorkflow(globalEngine)
+	assert.NoError(t, err)
+	err = localworkflows.InitDeltaFilterFindingsWorkflow(globalEngine)
 	assert.NoError(t, err)
 
 	// Invoke a custom command that returns input
