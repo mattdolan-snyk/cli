@@ -223,9 +223,15 @@ func runWorkflowAndProcessData(ctx context.Context, engine workflow.Engine, logg
 		return err
 	}
 
-	_, err = engine.Invoke(localworkflows.WORKFLOWID_OUTPUT_WORKFLOW, workflow.WithContext(ctx), workflow.WithInput(outputFiltered), workflow.WithInstrumentationCollector(ic))
+	outputDeltaFiltered, err := engine.Invoke(localworkflows.WORKFLOWID_FILTER_FINDINGS_DELTA, workflow.WithContext(ctx), workflow.WithInput(outputFiltered), workflow.WithInstrumentationCollector(ic))
+	if err != nil {
+		logger.Err(err).Msg(err.Error())
+		return err
+	}
+
+	_, err = engine.Invoke(localworkflows.WORKFLOWID_OUTPUT_WORKFLOW, workflow.WithContext(ctx), workflow.WithInput(outputDeltaFiltered), workflow.WithInstrumentationCollector(ic))
 	if err == nil {
-		err = getErrorFromWorkFlowData(engine, outputFiltered)
+		err = getErrorFromWorkFlowData(engine, outputDeltaFiltered)
 	}
 	return err
 }
