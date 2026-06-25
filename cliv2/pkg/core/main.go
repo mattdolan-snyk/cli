@@ -37,8 +37,8 @@ import (
 	"github.com/snyk/cli/cliv2/internal/cliv2"
 	"github.com/snyk/cli/cliv2/internal/constants"
 
-	cliv2utils "github.com/snyk/cli/cliv2/internal/utils"
 	persona "github.com/snyk/cli/cliv2/internal/persona"
+	cliv2utils "github.com/snyk/cli/cliv2/internal/utils"
 
 	localworkflows "github.com/snyk/go-application-framework/pkg/local_workflows"
 	"github.com/snyk/go-application-framework/pkg/local_workflows/config_utils"
@@ -181,6 +181,10 @@ func runMainWorkflow(config configuration.Configuration, cmd *cobra.Command, arg
 		globalLogger.Print("Failed to add flags", err)
 		return err
 	}
+
+	// Set default output format to TOON when running under an AI agent
+	// (and no explicit format flag is present). Explicit flags handled in GAF.
+	applyAgentOutputDefault(config)
 
 	// init UI
 	errorUI := consoleui.WithErrorOutput(os.Stdout)
